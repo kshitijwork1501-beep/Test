@@ -355,17 +355,19 @@ class="hidden lg:block bg-primary text-white px-6 py-2.5 rounded-lg font-semibol
       Tell us about your project. We’ll get back within 24 hours.
     </p>
 
-    <form class="space-y-4">
+    <form id="leadForm">
       <input
         type="text"
-        placeholder="Your Name"
+        name="name"
+        placeholder="Enter Your Name*"
         class="w-full p-3 rounded-lg border border-slate-200"
         required
       />
 
       <input
         type="email"
-        placeholder="Email Address"
+        name="email"
+        placeholder="Enter Your Email Address*"
         class="w-full p-3 rounded-lg border border-slate-200"
         required
       />
@@ -377,6 +379,7 @@ class="hidden lg:block bg-primary text-white px-6 py-2.5 rounded-lg font-semibol
       />
 
       <textarea
+      name="message"
         placeholder="What do you want to grow?"
         class="w-full p-3 rounded-lg border border-slate-200"
         rows="4"
@@ -412,6 +415,19 @@ class="hidden lg:block bg-primary text-white px-6 py-2.5 rounded-lg font-semibol
       modal.classList.add("hidden");
       modal.classList.remove("flex");
     }
+  });
+  const form = document.getElementById("leadForm");
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    console.log("FORM DATA:", data);
+
+    alert("Form captured! Check console 👀");
+    form.reset();
   });
 </script>
 </body>
