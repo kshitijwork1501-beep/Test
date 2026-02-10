@@ -395,6 +395,7 @@ class="hidden lg:block bg-primary text-white px-6 py-2.5 rounded-lg font-semibol
   </div>
 </div>
 <script>
+  // MODAL OPEN / CLOSE
   const openBtn = document.getElementById("openModal");
   const closeBtn = document.getElementById("closeModal");
   const modal = document.getElementById("modal");
@@ -409,25 +410,38 @@ class="hidden lg:block bg-primary text-white px-6 py-2.5 rounded-lg font-semibol
     modal.classList.remove("flex");
   });
 
-  // Close when clicking outside modal
   modal.addEventListener("click", (e) => {
     if (e.target === modal) {
       modal.classList.add("hidden");
       modal.classList.remove("flex");
     }
   });
+
+  // FORM SUBMIT → BACKEND
   const form = document.getElementById("leadForm");
 
-  form.addEventListener("submit", function (e) {
+  form.addEventListener("submit", async function (e) {
     e.preventDefault();
 
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
 
-    console.log("FORM DATA:", data);
+    const response = await fetch("/api/contact", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
 
-    alert("Form captured! Check console 👀");
-    form.reset();
+    if (response.ok) {
+      alert("Form submitted successfully 🚀");
+      form.reset();
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    } else {
+      alert("Something went wrong 😢");
+    }
   });
 </script>
 </body>
