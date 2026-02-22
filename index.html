@@ -394,57 +394,7 @@ class="hidden lg:block bg-primary text-white px-6 py-2.5 rounded-lg font-semibol
     </form>
   </div>
 </div>
-<script>
-  // MODAL OPEN / CLOSE
-  const openBtn = document.getElementById("openModal");
-  const closeBtn = document.getElementById("closeModal");
-  const modal = document.getElementById("modal");
-
-  openBtn.addEventListener("click", () => {
-    modal.classList.remove("hidden");
-    modal.classList.add("flex");
-  });
-
-  closeBtn.addEventListener("click", () => {
-    modal.classList.add("hidden");
-    modal.classList.remove("flex");
-  });
-
-  modal.addEventListener("click", (e) => {
-    if (e.target === modal) {
-      modal.classList.add("hidden");
-      modal.classList.remove("flex");
-    }
-  });
-
-  // FORM SUBMIT → BACKEND
-  const form = document.getElementById("leadForm");
-  const successPopup = document.getElementById("successPopup");
-const closeSuccess = document.getElementById("closeSuccess");
-
-  form.addEventListener("submit", async function (e) {
-    e.preventDefault();
-
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-
-    const response = await fetch("/api/contact", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (response.ok) {
-      form.reset();
-      modal.classList.add("hidden");
-      modal.classList.remove("flex");
-    } else {
-      alert("Something went wrong 😢");
-    }
-  });
-  <!-- Success Popup -->
+<!-- Success Popup -->
 <div id="successPopup"
   class="fixed inset-0 bg-black/50 hidden items-center justify-center z-[1000]">
 
@@ -468,6 +418,65 @@ const closeSuccess = document.getElementById("closeSuccess");
     </button>
 
   </div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const openBtn = document.getElementById("openModal");
+  const closeBtn = document.getElementById("closeModal");
+  const modal = document.getElementById("modal");
+  const form = document.getElementById("leadForm");
+  const successPopup = document.getElementById("successPopup");
+  const closeSuccess = document.getElementById("closeSuccess");
+
+  // Open modal
+  openBtn.addEventListener("click", () => {
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+  });
+
+  // Close modal
+  closeBtn.addEventListener("click", () => {
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+  });
+
+  // Submit form
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) throw new Error("Server error");
+
+      form.reset();
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+
+      successPopup.classList.remove("hidden");
+      successPopup.classList.add("flex");
+
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong");
+    }
+  });
+
+  // Close success popup
+  closeSuccess.addEventListener("click", () => {
+    successPopup.classList.add("hidden");
+    successPopup.classList.remove("flex");
+  });
+
+});
 </script>
 </body>
 </html>
